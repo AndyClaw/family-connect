@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h2 className="text-2xl font-display font-bold text-white mb-4">FamilyConnect</h2>
+            <h2 className="text-2xl font-display font-bold text-white mb-4">Family News and Views</h2>
             <p className="text-primary-300">Bringing families closer together, no matter how far apart.</p>
           </div>
           <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">

@@ -27,7 +27,7 @@ export default function Navbar() {
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
                 <span className="text-2xl font-display font-bold text-warmth-500 cursor-pointer">
-                  FamilyConnect
+                  Family News and Views
                 </span>
               </Link>
             </div>
