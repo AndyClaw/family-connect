@@ -1,7 +1,14 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BellIcon, MenuIcon } from "lucide-react";
+import { 
+  BellIcon, 
+  MenuIcon, 
+  Newspaper, 
+  Users, 
+  FileText, 
+  Settings
+} from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import {
   DropdownMenu,
@@ -13,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -31,30 +39,70 @@ export default function Navbar() {
                 </span>
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden md:ml-6 md:flex md:space-x-8">
               {isAuthenticated ? (
                 <>
+                  {/* Desktop Navigation Links */}
                   <Link href="/dashboard">
-                    <a className={`${location === '/dashboard' ? 'border-accent-500 text-primary-900' : 'border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                      Home
+                    <a className={cn(
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                      location === '/dashboard' 
+                        ? "border-accent-500 text-primary-900" 
+                        : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
+                    )}>
+                      <Newspaper className="mr-2 h-4 w-4" />
+                      News Feed
                     </a>
                   </Link>
-                  <Link href="/profile">
-                    <a className={`${location === '/profile' ? 'border-accent-500 text-primary-900' : 'border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                      My Profile
+                  <Link href="/people">
+                    <a className={cn(
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                      location === '/people' 
+                        ? "border-accent-500 text-primary-900" 
+                        : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
+                    )}>
+                      <Users className="mr-2 h-4 w-4" />
+                      People
+                    </a>
+                  </Link>
+                  <Link href="/newsletters">
+                    <a className={cn(
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                      location === '/newsletters' 
+                        ? "border-accent-500 text-primary-900" 
+                        : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
+                    )}>
+                      <FileText className="mr-2 h-4 w-4" />
+                      Newsletters
+                    </a>
+                  </Link>
+                  <Link href="/settings">
+                    <a className={cn(
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                      location === '/settings' 
+                        ? "border-accent-500 text-primary-900" 
+                        : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
+                    )}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
                     </a>
                   </Link>
                 </>
               ) : (
                 <Link href="/">
-                  <a className={`${location === '/' ? 'border-accent-500 text-primary-900' : 'border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
+                  <a className={cn(
+                    "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                    location === '/' 
+                      ? "border-accent-500 text-primary-900" 
+                      : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
+                  )}>
                     Home
                   </a>
                 </Link>
               )}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+          <div className="hidden md:ml-6 md:flex md:items-center space-x-4">
             {isAuthenticated ? (
               <>
                 <Button variant="ghost" size="icon" className="text-primary-400 hover:text-primary-500">
@@ -75,12 +123,12 @@ export default function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link href="/profile">
-                        <a className="cursor-pointer w-full">Profile</a>
+                        <a className="cursor-pointer w-full">My Profile</a>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/dashboard">
-                        <a className="cursor-pointer w-full">Dashboard</a>
+                      <Link href="/settings">
+                        <a className="cursor-pointer w-full">Settings</a>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -101,8 +149,8 @@ export default function Navbar() {
             )}
           </div>
           
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
+          {/* Mobile menu button - only visible on medium and up screens */}
+          <div className="flex items-center md:hidden">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-primary-400 hover:text-primary-500">
@@ -126,11 +174,6 @@ export default function Navbar() {
                           </p>
                         </div>
                       </div>
-                      <Link href="/dashboard">
-                        <a className="py-2 text-primary-700 hover:text-primary-900 font-medium" onClick={() => setMobileMenuOpen(false)}>
-                          Home
-                        </a>
-                      </Link>
                       <Link href="/profile">
                         <a className="py-2 text-primary-700 hover:text-primary-900 font-medium" onClick={() => setMobileMenuOpen(false)}>
                           My Profile
