@@ -5,10 +5,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Navbar from "@/components/layout/Navbar";
+import BottomNav from "@/components/layout/BottomNav";
 import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
+import People from "@/pages/People";
+import NewslettersOverview from "@/pages/NewslettersOverview";
+import Settings from "@/pages/Settings";
 import FamilyMembers from "@/pages/FamilyMembers";
 import Newsletters from "@/pages/Newsletters";
 import CreateOrEditProfile from "@/pages/CreateOrEditProfile";
@@ -38,21 +42,39 @@ function PrivateRoute({ component: Component, ...rest }: { component: React.FC }
 }
 
 function Router() {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <div className="flex-grow">
         <Switch>
+          {/* Public Routes */}
           <Route path="/" component={Landing} />
+          
+          {/* Main Navigation Routes */}
           <Route path="/dashboard">
             {() => <PrivateRoute component={Dashboard} />}
           </Route>
+          <Route path="/people">
+            {() => <PrivateRoute component={People} />}
+          </Route>
+          <Route path="/newsletters">
+            {() => <PrivateRoute component={NewslettersOverview} />}
+          </Route>
+          <Route path="/settings">
+            {() => <PrivateRoute component={Settings} />}
+          </Route>
+          
+          {/* Profile Routes */}
           <Route path="/profile">
             {() => <PrivateRoute component={Profile} />}
           </Route>
           <Route path="/profile/edit">
             {() => <PrivateRoute component={CreateOrEditProfile} />}
           </Route>
+          
+          {/* Family Routes */}
           <Route path="/family/create">
             {() => <PrivateRoute component={CreateFamily} />}
           </Route>
@@ -62,9 +84,12 @@ function Router() {
           <Route path="/family/:id/newsletters">
             {(params) => <PrivateRoute component={() => <Newsletters familyId={Number(params.id)} />} />}
           </Route>
+          
+          {/* Fallback 404 Route */}
           <Route component={NotFound} />
         </Switch>
       </div>
+      {isAuthenticated && <BottomNav />}
       <Footer />
     </div>
   );
