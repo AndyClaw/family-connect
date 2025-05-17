@@ -4,7 +4,8 @@ import {
   Users, 
   FileText, 
   Settings,
-  PlusCircle
+  PlusCircle,
+  Calendar
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -78,16 +79,16 @@ export default function BottomNav() {
             </Dialog>
           </div>
           
-          {/* Newsletters */}
-          <Link href="/newsletters">
+          {/* Events Calendar */}
+          <Link href="/events">
             <a className={cn(
               "flex flex-col items-center justify-center space-y-1",
-              location === "/newsletters" 
+              location === "/events" 
                 ? "text-accent-500" 
                 : "text-gray-500 hover:text-accent-400"
             )}>
-              <FileText className="h-6 w-6" />
-              <span className="text-xs">Newsletters</span>
+              <Calendar className="h-6 w-6" />
+              <span className="text-xs">Events</span>
             </a>
           </Link>
           

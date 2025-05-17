@@ -11,6 +11,7 @@ import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
 import People from "@/pages/People";
+import Events from "@/pages/Events";
 import NewslettersOverview from "@/pages/NewslettersOverview";
 import Settings from "@/pages/Settings";
 import FamilyMembers from "@/pages/FamilyMembers";
@@ -58,6 +59,9 @@ function Router() {
           </Route>
           <Route path="/people">
             {() => <PrivateRoute component={People} />}
+          </Route>
+          <Route path="/events">
+            {() => <PrivateRoute component={Events} />}
           </Route>
           <Route path="/newsletters">
             {() => <PrivateRoute component={NewslettersOverview} />}
