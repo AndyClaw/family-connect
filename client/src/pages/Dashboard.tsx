@@ -7,30 +7,25 @@ import { PlusIcon, MessageCircle } from "lucide-react";
 import NewPost from "@/components/post/NewPost";
 import PostList from "@/components/post/PostList";
 import { useState } from "react";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [selectedFamilyId, setSelectedFamilyId] = useState<number | null>(null);
+  const [selectedFamilyId, setSelectedFamilyId] = useState<number | string>("all");
 
   // Fetch user's families
   const { data: families, isLoading: familiesLoading } = useQuery({
     queryKey: ['/api/families'],
   });
 
-  // Set the first family as selected by default
-  if (families && families.length > 0 && !selectedFamilyId) {
-    setSelectedFamilyId(families[0].id);
-  }
-
   return (
-    <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 max-w-7xl">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">News Feed</h1>
-        <p className="text-muted-foreground mt-2">
-          See the latest updates from your family
-        </p>
-      </header>
-
+    <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 max-w-5xl">
       {families?.length === 0 && !familiesLoading ? (
         <div className="bg-white rounded-lg shadow p-8 text-center">
           <MessageCircle className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
@@ -51,49 +46,101 @@ export default function Dashboard() {
             </div>
           ) : (
             <>
-              {families && families.length > 0 && (
-                <div className="mb-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                    <div>
-                      <h2 className="text-xl font-semibold text-primary-900">Your Family Groups</h2>
-                    </div>
-                    <Button asChild>
-                      <Link href="/family/create">
-                        <PlusIcon className="mr-2 h-4 w-4" /> Create a Family Group
-                      </Link>
-                    </Button>
+              {/* New Post Form */}
+              <div className="bg-white rounded-lg shadow p-6 mb-8">
+                <div className="flex flex-row items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-primary-900">Share an Update</h2>
+                  
+                  {families && families.length > 1 && (
+                    <Select 
+                      value={String(selectedFamilyId)} 
+                      onValueChange={(value) => setSelectedFamilyId(value === "all" ? "all" : Number(value))}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select family" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectedFamilyId === "all" ? (
+                          <SelectItem value="all">All Families</SelectItem>
+                        ) : (
+                          <>
+                            <SelectItem value="all">All Families</SelectItem>
+                            {families.map((family: any) => (
+                              <SelectItem key={family.id} value={String(family.id)}>
+                                {family.name}
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+                {/* Display the post form for the selected family */}
+                {selectedFamilyId !== "all" ? (
+                  <NewPost familyId={selectedFamilyId as number} />
+                ) : (
+                  <div className="border border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <p className="text-muted-foreground mb-2">Please select a specific family to post to</p>
+                    <Select 
+                      value={String(selectedFamilyId)} 
+                      onValueChange={(value) => setSelectedFamilyId(Number(value))}
+                    >
+                      <SelectTrigger className="w-full max-w-xs mx-auto">
+                        <SelectValue placeholder="Select family" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {families.map((family: any) => (
+                          <SelectItem key={family.id} value={String(family.id)}>
+                            {family.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div className="flex overflow-x-auto pb-2 space-x-4">
+                )}
+              </div>
+              
+              {/* Posts Feed */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex flex-row items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-primary-900">Latest Updates</h2>
+                  
+                  {families && families.length > 1 && (
+                    <Select 
+                      value={String(selectedFamilyId)} 
+                      onValueChange={(value) => setSelectedFamilyId(value === "all" ? "all" : Number(value))}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="View posts from" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Families</SelectItem>
+                        {families.map((family: any) => (
+                          <SelectItem key={family.id} value={String(family.id)}>
+                            {family.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+                
+                {/* Display posts based on selection */}
+                {selectedFamilyId === "all" ? (
+                  // This would be replaced with a component that shows posts from all families
+                  // We'll need a backend route that fetches posts from all families
+                  <div className="space-y-6">
                     {families.map((family: any) => (
-                      <div 
-                        key={family.id} 
-                        className={`flex-shrink-0 px-4 py-3 rounded-lg cursor-pointer border ${
-                          selectedFamilyId === family.id ? 'border-accent-500 bg-accent-50' : 'border-gray-200 bg-white'
-                        }`}
-                        onClick={() => setSelectedFamilyId(family.id)}
-                      >
-                        <h3 className="font-medium text-primary-900">{family.name}</h3>
+                      <div key={family.id}>
+                        <PostList familyId={family.id} />
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {selectedFamilyId && (
-                <div className="bg-white rounded-lg shadow p-6">
-                  {/* New Post Form */}
-                  <div className="mb-8">
-                    <h2 className="text-xl font-semibold text-primary-900 mb-4">Share an Update</h2>
-                    <NewPost familyId={selectedFamilyId} />
-                  </div>
-                  
-                  {/* Family Posts Feed */}
-                  <div className="mt-8">
-                    <h2 className="text-xl font-semibold text-primary-900 mb-4">Latest Updates</h2>
-                    <PostList familyId={selectedFamilyId} />
-                  </div>
-                </div>
-              )}
+                ) : (
+                  <PostList familyId={selectedFamilyId as number} />
+                )}
+              </div>
             </>
           )}
         </>

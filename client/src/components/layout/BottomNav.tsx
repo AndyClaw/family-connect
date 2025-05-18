@@ -29,10 +29,10 @@ export default function BottomNav() {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
         <div className="grid grid-cols-5 h-16">
           {/* News Feed */}
-          <Link href="/dashboard">
+          <Link href="/feed">
             <a className={cn(
               "flex flex-col items-center justify-center space-y-1",
-              location === "/dashboard" 
+              location === "/feed" 
                 ? "text-accent-500" 
                 : "text-gray-500 hover:text-accent-400"
             )}>

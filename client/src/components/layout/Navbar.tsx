@@ -44,10 +44,10 @@ export default function Navbar() {
               {isAuthenticated ? (
                 <>
                   {/* Desktop Navigation Links */}
-                  <Link href="/dashboard">
+                  <Link href="/feed">
                     <a className={cn(
                       "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                      location === '/dashboard' 
+                      location === '/feed' 
                         ? "border-accent-500 text-primary-900" 
                         : "border-transparent text-primary-500 hover:border-primary-300 hover:text-primary-700"
                     )}>

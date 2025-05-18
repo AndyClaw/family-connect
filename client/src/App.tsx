@@ -54,6 +54,9 @@ function Router() {
           <Route path="/" component={Landing} />
           
           {/* Main Navigation Routes */}
+          <Route path="/feed">
+            {() => <PrivateRoute component={Dashboard} />}
+          </Route>
           <Route path="/dashboard">
             {() => <PrivateRoute component={Dashboard} />}
           </Route>
